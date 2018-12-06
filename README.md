@@ -21,5 +21,6 @@ de leefbaarometer score is afhankelijk van 100 indicatoren die in 5 dimensies zi
 2. bewoners (aandeel allochtonen, ouderen of eenoudergezinnen, etc)
 3. voorzieningen (afstand tot voorziening, scholen en doctors binnen 1 km, verdwenen supermarkten, etc)
 4. veiligheid (overlast, ordeverstoringen, geweld, inbraken)
-5. fysieke omgeving (aantal monumenten, aandeel groen, aandeel water, natuurramp-risico, etc)
+5. fysieke omgeving (aantal monumenten, aandeel groen, aandeel water, natuurramp-risico, etc)  
+
 om de vorm en naam van de gemeentes/wijken te krijgen, zal de shapefile geïnterpreteerd moeten worden.  
