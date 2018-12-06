@@ -16,4 +16,10 @@ dropdownbox voor keuze tussen modes op de kaart(huidige leefbaarheid of verander
 ## prerequisites
 ### data source
 https://data.overheid.nl/data/dataset/leefbaarometer-2-0---meting-2016  
+de leefbaarometer score is afhankelijk van 100 indicatoren die in 5 dimensies zijn ingedeeld:
+1. woningen (aantal woningen, aandeel vrijstaande woningen, etc)
+2. bewoners (aandeel allochtonen, ouderen of eenoudergezinnen, etc)
+3. voorzieningen (afstand tot voorziening, scholen en doctors binnen 1 km, verdwenen supermarkten, etc)
+4. veiligheid (overlast, ordeverstoringen, geweld, inbraken)
+5. fysieke omgeving (aantal monumenten, aandeel groen, aandeel water, natuurramp-risico, etc)
 om de vorm en naam van de gemeentes/wijken te krijgen, zal de shapefile geïnterpreteerd moeten worden.  
