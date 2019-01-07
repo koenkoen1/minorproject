@@ -1,26 +1,38 @@
 # minorproject
+Koen Dielhoff
+
 ## Problem statement
-Waar kan je het best leven in nederland als geld geen probleem is?  
+Which part of the Netherlands is best to live in if money is of no concern?
 
 ## solution
-met de data van de leefbaarometer, zou het mogelijk moeten zijn om makkelijk te zien waar het best geleefd wordt.  
+The "leefbaarometer" has data about how well people are living in certain areas of the Netherlands. This data just has to be visualised.
+
+![missing picture](https://github.com/koenkoen1/minorproject/blob/master/doc/plaatje.png)
 
 ### features (minimum viable product)
-leefbaarheidkaart voor gemeentes in land  
-leefbaarheidkaart voor wijken in gekozen gemeente  
-leefbaarheidsgrafiek voor gekozen gemeente over bepaalde tijd  
-leefbaarheidsgrafiek voor gekozen wijk over bepaalde tijd  
-dropdownbox voor periodes van jaren  
-dropdownbox voor keuze tussen modes op de kaart(huidige leefbaarheid of verandering in leefbaarheid)  
+leefbaarheidmap of municipalities in the country that transforms into a map of the districts in the chosen municipality.
+linegraph  of leefbaarheid in a chosen municipality/district over a period of time.
+piechart with distribution of leefbaarheid in the country/chosen municipality.
+dropdownbox for time periods
+dropdownbox to choose between current leefbaarheid and change in leefbaarheid.
+Button to return to the map of municipalities in the country.
 
 ## prerequisites
 ### data source
 https://data.overheid.nl/data/dataset/leefbaarometer-2-0---meting-2016  
-de leefbaarometer score is afhankelijk van 100 indicatoren die in 5 dimensies zijn ingedeeld:
-1. woningen (aantal woningen, aandeel vrijstaande woningen, etc)
-2. bewoners (aandeel allochtonen, ouderen of eenoudergezinnen, etc)
-3. voorzieningen (afstand tot voorziening, scholen en doctors binnen 1 km, verdwenen supermarkten, etc)
-4. veiligheid (overlast, ordeverstoringen, geweld, inbraken)
-5. fysieke omgeving (aantal monumenten, aandeel groen, aandeel water, natuurramp-risico, etc)  
+The leefbaarometer score is dependent on 100 factors divided into categories:
+1. houses (quantity, amount of detached houses, etc)
+2. residents (amount of immigrants, elders or single-parents, etc)
+3. services (distance to services, schools and doctors within 1 km, disappearing grocery stores, etc)
+4. safety (nuisances, disturbances, violence, burglaries)
+5. environment (quantity of monumnets, surface covered with green or water, risks of natural disasters, etc)  
 
-om de vorm en naam van de gemeentes/wijken te krijgen, zal de shapefile geïnterpreteerd moeten worden.  
+### external components
+for converting shapefile to geojson:  
+https://github.com/calvinmetcalf/shapefile-js
+
+### similar visualisations
+none yet
+
+### hardest parts
+Interpreting the shapefile included in the data and visualising the map
