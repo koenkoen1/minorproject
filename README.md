@@ -29,7 +29,7 @@ The leefbaarometer score is dependent on 100 factors divided into categories:
 
 ### external components
 for converting shapefile to geojson:  
-https://github.com/calvinmetcalf/shapefile-js
+https://github.com/gipong/shp2geojson.js
 
 ### similar visualisations
 none yet
