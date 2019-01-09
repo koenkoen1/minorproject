@@ -1,0 +1,28 @@
+.graphs {
+  position:relative;
+}
+
+img {
+  margin:10px
+}
+
+.pieChart {
+  position:absolute;
+  bottom:50%;
+}
+
+.backButton {
+  position:absolute;
+  top:11px;
+  left:11px;
+}
+
+.dataSauce {
+  position:fixed;
+  bottom:0px;
+  text-align:center;
+  background-color:white;
+  border-style:solid;
+  border-width:thin;
+  border-color:black;
+}

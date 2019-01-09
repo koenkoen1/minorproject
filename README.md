@@ -14,7 +14,7 @@ leefbaarheidmap of municipalities in the country that transforms into a map of t
 linegraph  of leefbaarheid in a chosen municipality/district over a period of time.
 piechart with distribution of leefbaarheid in the country/chosen municipality.
 dropdownbox for time periods
-dropdownbox to choose between current leefbaarheid and change in leefbaarheid.
+button to choose between current leefbaarheid and change in leefbaarheid.
 Button to return to the map of municipalities in the country.
 
 ## prerequisites

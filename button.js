@@ -33,3 +33,8 @@ function toYear() {
   };
   document.getElementById("changeMode").setAttribute("onclick", "toPeriod()");
 }
+
+function toCountry() {
+  document.getElementById("lineChart").innerHTML = ""
+  document.getElementById("back").innerHTML = ""
+}

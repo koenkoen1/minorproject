@@ -7,13 +7,16 @@ This will hold my graphs
   <head>
     <meta charset="utf-8">
     <script src="d3/d3.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.3/proj4.js"></script>
     <script src="scripts/lib/jszip.js"></script>
     <script src="scripts/lib/jszip-utils.js"></script>
     <script src="scripts/preprocess.js"></script>
     <script src="scripts/preview.js"></script>
+
     <script src="graphs.js"></script>
     <script src="button.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
     <title>leefbaarheid</title>
   </head>
   <body>
@@ -28,11 +31,14 @@ This will hold my graphs
       </select>
       <button type="button" id="changeMode" onClick="toPeriod();">Mode</button>
     </div>
-    <span class="graphs">
-      map and pie chart
-    </span>
-    <footer>
+    <div id="graphs" class="graphs">
+      <img src="https://www.imergis.nl/map/2018-G770P.png" alt="map" width="591" height="723" onclick="mapClick()">
+      <span class="pieChart">and pie chart</span>
+      <span id="lineChart"></span>
+      <div id="back" class="backButton"></div>
+    </div>
+    <div class="dataSauce">
       Data source: https://data.overheid.nl/data/dataset/leefbaarometer-2-0---meting-2016
-    </footer>
+    </div>
   </body>
 </html>
