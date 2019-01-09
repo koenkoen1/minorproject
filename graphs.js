@@ -6,7 +6,7 @@ window.onload = function() {
     }, function(geojson) {
       resolve(geojson);
     });
-  })
+  });
 
   let wijkShape = new Promise(function(resolve, reject) {
     loadshp({
@@ -15,7 +15,7 @@ window.onload = function() {
     }, function(geojson) {
       resolve(geojson);
     });
-  })
+  });
 
   let requests = [gemeenteShape, wijkShape, d3.json('data/Gemeente/score_gemeente.json'), d3.json('data/Wijk/wijk.json')];
 
