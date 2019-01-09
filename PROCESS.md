@@ -7,4 +7,5 @@ Made a dropdown for time and a button to switch it between years and time period
 
 # Day 3
 Temporarily using a picture of the Netherlands as placeholder to click on.
-I will probably have the map on the left of the screen, pie chart upper-right and line chart lower-right. with the buttons above the map.
+I will probably have the map on the left of the screen, pie chart upper-right and line chart lower-right. with the buttons above the map.  
+A json file would be easier to use than a xlsx file. Conversions were made.
