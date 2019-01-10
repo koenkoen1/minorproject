@@ -9,3 +9,7 @@ Made a dropdown for time and a button to switch it between years and time period
 Temporarily using a picture of the Netherlands as placeholder to click on.
 I will probably have the map on the left of the screen, pie chart upper-right and line chart lower-right. with the buttons above the map.  
 A json file would be easier to use than a xlsx file. Conversions were made.
+
+# Day 4
+The script I found for converting shapefiles to geojson in javascript could not be used. The script works fine with one shapefile, but loading two shapefiles at the same time causes one of the resulting geojsons to be overwritten somehow. There is actually no reason for me to preprocess when my script is run, so I have converted them using PyShp and saved them as json files.
+The preprocessed geojsons are too large for github, so I zipped them and found a way to unzip them in my script.

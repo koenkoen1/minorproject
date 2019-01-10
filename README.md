@@ -10,12 +10,15 @@ The "leefbaarometer" has data about how well people are living in certain areas 
 ![missing picture](https://github.com/koenkoen1/minorproject/blob/master/doc/plaatje.png)
 
 ### features (minimum viable product)
-leefbaarheidmap of municipalities in the country that transforms into a map of the districts in the chosen municipality.
+leefbaarheidmap of municipalities in the country
 linegraph  of leefbaarheid in a chosen municipality/district over a period of time.
 piechart with distribution of leefbaarheid in the country/chosen municipality.
 dropdownbox for time periods
 button to choose between current leefbaarheid and change in leefbaarheid.
-Button to return to the map of municipalities in the country.
+
+### extra features
+leefbaarheidmap transforms into a map of the districts in the chosen municipality.
+button to return to the map of municipalities in the country.
 
 ## prerequisites
 ### data source
@@ -27,12 +30,13 @@ The leefbaarometer score is dependent on 100 factors divided into categories:
 4. safety (nuisances, disturbances, violence, burglaries)
 5. environment (quantity of monumnets, surface covered with green or water, risks of natural disasters, etc)  
 
+The shapefiles were converted to geojsons and the leefbaarheidsscores were converted from .xlsx to .json
+
 ### external components
-for converting shapefile to geojson:  
-https://github.com/gipong/shp2geojson.js
+d3-tip
 
 ### similar visualisations
-none yet
+none
 
 ### hardest parts
 Interpreting the shapefile included in the data and visualising the map
