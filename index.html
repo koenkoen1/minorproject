@@ -8,6 +8,7 @@ This will hold my graphs
     <meta charset="utf-8">
     <script type="text/javascript" src="/scripts/jszip.js"></script>
     <script type="text/javascript" src="/scripts/jszip-utils.js"></script>
+    <script type="text/javascript" src="/scripts/topojson.min.js"></script>
     <script src="d3/d3.js"></script>
     <script src="graphs.js"></script>
     <script src="button.js"></script>
@@ -27,6 +28,7 @@ This will hold my graphs
       <button type="button" id="changeMode" onClick="toPeriod();">Mode</button>
     </div>
     <div id="graphs" class="graphs">
+      <object data="data/Nederland_gemeenten_2016.svg" type="image/svg+xml"></object>
       <img src="https://www.imergis.nl/map/2018-G770P.png" alt="map" width="591" height="723" onclick="mapClick()">
       <span class="pieChart">and pie chart</span>
       <span id="lineChart"></span>
