@@ -28,14 +28,20 @@ This will hold my graphs
       <button type="button" id="changeMode" onClick="toPeriod();">Mode</button>
     </div>
     <div id="graphs" class="graphs">
-      <object data="data/Nederland_gemeenten_2016.svg" type="image/svg+xml"></object>
+      <object data="data/Nederland_gemeenten_2016.svg" type="image/svg+xml" id="map"></object>
+
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="700px" height="820px" viewBox="60 25 500 600" version="1.1">
+        <use xlink:href="https://upload.wikimedia.org/wikipedia/commons/b/b7/Nederland_gemeenten_2016.svg"></use>
+      </svg>
+
       <img src="https://www.imergis.nl/map/2018-G770P.png" alt="map" width="591" height="723" onclick="mapClick()">
-      <span class="pieChart">and pie chart</span>
+
       <span id="lineChart"></span>
       <div id="back" class="backButton"></div>
     </div>
     <div class="dataSauce">
-      Data source: https://data.overheid.nl/data/dataset/leefbaarometer-2-0---meting-2016
+      Data source: https://data.overheid.nl/data/dataset/leefbaarometer-2-0---meting-2016<br>
+      Map source: https://upload.wikimedia.org/wikipedia/commons/b/b7/Nederland_gemeenten_2016.svg
     </div>
   </body>
 </html>

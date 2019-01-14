@@ -8,7 +8,8 @@ img {
 
 .pieChart {
   position:absolute;
-  bottom:50%;
+  bottom:60%;
+  right:10%;
 }
 
 .backButton {

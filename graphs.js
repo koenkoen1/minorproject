@@ -1,20 +1,31 @@
-window.onload = function() {
-  var shapesZip = new JSZip.external.Promise(function (resolve, reject) {
-    JSZipUtils.getBinaryContent('data/geojsons.zip', function(err, data) {
-        if (err) {
-            reject(err);
-        } else {
-            resolve(data);
-        }
-    });
-  }).then(function (data) {
-      return JSZip.loadAsync(data);
-  });
+let mapColours = ['#ffffcc','#d9f0a3','#addd8e','#78c679','#31a354','#006837']
 
-  let requests = [d3.json('data/Gemeente/score_gemeente.json'), d3.json('data/Wijk/wijk.json'), shapesZip)];
+window.onload = function() {
+  // var shapesZip = new JSZip.external.Promise(function (resolve, reject) {
+  //   JSZipUtils.getBinaryContent('data/geojsons.zip', function(err, data) {
+  //       if (err) {
+  //           reject(err);
+  //       } else {
+  //           resolve(data);
+  //       }
+  //   });
+  // }).then(function (data) {
+  //     return JSZip.loadAsync(data);
+  // });
+  let requests = [d3.json('data/gemeente.json'), d3.json('data/wijk.json')];
 
   Promise.all(requests).then(function(response) {
     console.log(response);
+
+    let selection = d3.select(document.getElementById("map").contentDocument)
+                      .selectAll("path");
+    selection.each(function() {
+      let score = response[0][this.getAttribute('cbs')]['KL16']
+      d3.select(this).attr("fill", mapColours[score - 4])
+          .attr("onclick", "mapClick()")
+    })
+
+    createPieGraph(response[0])
 
     // var y = response[2].file("WijkShapes.json").async("string");
     // var z = response[2].file("GemeenteShapes.json").async("string");
@@ -29,44 +40,49 @@ window.onload = function() {
   });
 }
 
-function createMap(data) {
-  // width and height
-  var w = 600,
-      h = 700;
+function createPieGraph(data) {
+  let w = 500,
+  h = 500,
+  r = 250;
 
-  // var geojson = topojson.feature(data, data.objects.GemeenteShapes)
-  // console.log(geojson)
+  const svg = d3.select(".graphs")
+      .append("svg")              //create the SVG element inside the <body>
+          .attr("width", w)           //set the width and height of our visualization (these will be attributes of the <svg> tag
+          .attr("height", h)
+          .attr("class", "pieChart")
 
-  // define map projection
-  var projection = d3.geoMercator().scale(6700)
+  const g = svg.append("g")
+      .attr("transform", `translate(${w / 2},${h / 2})`);
 
-  //Define default path generator
-  var path = d3.geoPath()
-    .projection(projection);
+  let counter = {}
+  for (var key in data) {
+    counter[data[key]['KL16']] = counter[data[key]['KL16']] + 1 || 0;
+  };
 
-  var b = path.bounds(data.features[3]),
-  s = .2 / Math.max((b[1][0] - b[0][0]) / w, (b[1][1] - b[0][1]) / h),
-  t = [(w - s * (b[1][0] + b[0][0])) / 2, (h - s * (b[1][1] + b[0][1])) / 2];
+  dataArray = []
+  for (number in counter) {
+    let object = {}
+    object["number"] = number;
+    object["value"] = counter[number];
+    dataArray.push(object)
+  }
 
-  projection
-          .scale(s * 4000000)
-          .translate(t);
+  let arcs = d3.pie().value(function(d) { return d.value; })
+    .sort(function(a, b) { return a.number.localeCompare(b.number); })(dataArray);
 
-  var svg = d3.select("body")
-    .append("svg")
-    .attr("id", "map")
-    .attr("width", w)
-    .attr("height", h)
+  var arc = d3.arc()
+    .innerRadius(0)
+    .outerRadius(r)
 
-  svg.selectAll("path")
-          .data(data.features)
-          .enter()
-          .append("path")
-          .attr("d", path)
-          .style("fill", "none")
-          .style("stroke", "black");
+  g.selectAll("path")
+    .data(arcs)
+    .enter().append("path")
+      .attr("fill", function(d) {
+        return mapColours[d.data.number - 4];
+      })
+      .attr("stroke", "white")
+      .attr("d", arc)
 
-  console.log("done")
 }
 
 function mapClick() {

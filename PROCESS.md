@@ -16,6 +16,8 @@ The preprocessed geojsons are too large for github, so I zipped them and found a
 
 # Day 5
 Made an attempt at creating a map. I got a square that makes my site unresponsive.  
-I am thinking of converting the geojson to a topojson as many examples use this format. If I were to use topojson, I would not have to zip and unzip the geojson.  
-Tried the conversion, but there is no difference. After multiple attempts at creating the map, I came to the conclusion that it would not work.  
-Now I will download a .svg from wikipedia and add it to my html and alter it if possible for my own purposes.
+Tried converting the geojson to topojson, but there is no difference. After multiple attempts at creating the map, I came to the conclusion that it would not work.  
+Now I will download a .svg from wikipedia, embed it in my html as <object> and alter it if possible for my own purposes.
+
+# Day 6
+I changed the way 'leefbaarheid'-scores are formatted in the json from [{name: place1, score1: 5, score2: 6, etc}, etc] to {place1: {score1 : 5, etc}, etc}. The former format was obtained when the .xlsx was converted to .json by an online converter, but the latter format is more useful due to being able to select a municipality by their name/code.  
