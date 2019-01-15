@@ -21,3 +21,6 @@ Now I will download a .svg from wikipedia, embed it in my html as <object> and a
 
 # Day 6
 I changed the way 'leefbaarheid'-scores are formatted in the json from [{name: place1, score1: 5, score2: 6, etc}, etc] to {place1: {score1 : 5, etc}, etc}. The former format was obtained when the .xlsx was converted to .json by an online converter, but the latter format is more useful due to being able to select a municipality by their name/code.  
+
+# Day 7
+Styleguide

@@ -1,4 +1,4 @@
-let mapColours = ['#ffffcc','#d9f0a3','#addd8e','#78c679','#31a354','#006837']
+const mapColours = ['#ffffcc','#d9f0a3','#addd8e','#78c679','#31a354','#006837']
 
 window.onload = function() {
   // var shapesZip = new JSZip.external.Promise(function (resolve, reject) {
@@ -12,18 +12,43 @@ window.onload = function() {
   // }).then(function (data) {
   //     return JSZip.loadAsync(data);
   // });
-  let requests = [d3.json('data/gemeente.json'), d3.json('data/wijk.json')];
+
+  // data loading promises
+  const requests = [d3.json('data/gemeente.json'), d3.json('data/wijk.json')];
 
   Promise.all(requests).then(function(response) {
     console.log(response);
 
     let selection = d3.select(document.getElementById("map").contentDocument)
                       .selectAll("path");
+
     selection.each(function() {
-      let score = response[0][this.getAttribute('cbs')]['KL16']
-      d3.select(this).attr("fill", mapColours[score - 4])
-          .attr("onclick", "mapClick()")
-    })
+      d3.select(this).on("click", function() {
+        createLineGraph(response[0][this.getAttribute('cbs')]);
+        document.getElementById("lineChart").innerHTML = "A line diagram appears here";
+        document.getElementById("back").innerHTML = "<button type='button' onclick='toCountry()'>Back</button>";
+      });
+    });
+
+    function dataChange(stat) {
+      selection.each(function() {
+        let score = response[0][this.getAttribute('cbs')][stat]
+        d3.select(this).attr("fill", mapColours[score - 4])
+      })
+    }
+
+    dataChange('KL16')
+
+    let currentMode = 'KL16'
+    d3.select('#changeMode').on("click", function() {
+      if (currentMode === 'KL16') {
+        dataChange('VKL0216');
+        currentMode = 'VKL0216'
+      } else {
+        dataChange('KL16');
+        currentMode = 'KL16';
+      };
+    });
 
     createPieGraph(response[0])
 
@@ -41,26 +66,26 @@ window.onload = function() {
 }
 
 function createPieGraph(data) {
-  let w = 500,
-  h = 500,
-  r = 250;
+  let w = 400,
+    h = 400,
+    r = 200;
 
   const svg = d3.select(".graphs")
-      .append("svg")              //create the SVG element inside the <body>
-          .attr("width", w)           //set the width and height of our visualization (these will be attributes of the <svg> tag
-          .attr("height", h)
-          .attr("class", "pieChart")
+      .append("svg")
+        .attr("width", w)
+        .attr("height", h)
+        .attr("class", "pieChart")
 
   const g = svg.append("g")
       .attr("transform", `translate(${w / 2},${h / 2})`);
 
   let counter = {}
-  for (var key in data) {
+  for (let key in data) {
     counter[data[key]['KL16']] = counter[data[key]['KL16']] + 1 || 0;
   };
 
-  dataArray = []
-  for (number in counter) {
+  let dataArray = []
+  for (let number in counter) {
     let object = {}
     object["number"] = number;
     object["value"] = counter[number];
@@ -70,22 +95,66 @@ function createPieGraph(data) {
   let arcs = d3.pie().value(function(d) { return d.value; })
     .sort(function(a, b) { return a.number.localeCompare(b.number); })(dataArray);
 
-  var arc = d3.arc()
-    .innerRadius(0)
-    .outerRadius(r)
+  let arc = d3.arc()
+      .innerRadius(0)
+      .outerRadius(r)
 
   g.selectAll("path")
-    .data(arcs)
-    .enter().append("path")
-      .attr("fill", function(d) {
-        return mapColours[d.data.number - 4];
-      })
-      .attr("stroke", "white")
-      .attr("d", arc)
-
+      .data(arcs)
+      .enter().append("path")
+        .attr("fill", function(d) {
+          return mapColours[d.data.number - 4];
+        })
+        .attr("stroke", "white")
+        .attr("d", arc)
 }
 
-function mapClick() {
-  document.getElementById("lineChart").innerHTML = "A line diagram appears here";
-  document.getElementById("back").innerHTML = "<button type='button' onclick='toCountry()'>Back</button>";
+function createLineGraph(data) {
+  let w = 600,
+    h = 300,
+    margin = 25;
+
+  let dataArray = [];
+  for (let key in data) {
+    let object = {},
+      splitKey = key.split("L");
+    if (key[0] === "K") {
+      object["value"] = data[key];
+      object["year"] = parseInt(splitKey[1]) + 2000;
+      dataArray.push(object)
+    }
+  }
+  console.log(dataArray);
+
+  let xScale = d3.scaleLinear()
+      .domain([2002, 2016])
+      .range([margin, w - margin])
+
+  let yScale = d3.scaleLinear()
+      .domain([0, 10])
+      .range([h - margin, margin]);
+
+  let line = d3.line()
+      .x(function(d) { return xScale(d.year); })
+      .y(function(d) { return yScale(d.value); })
+      .curve(d3.curveMonotoneX)
+
+  let svg = d3.select("body").append("svg")
+      .attr("width", w + 2 * margin)
+      .attr("height", h + 2 * margin)
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + (h - margin) + ")")
+      .call(d3.axisBottom(xScale));
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .attr("transform", "translate(" + margin + ", 0)")
+      .call(d3.axisLeft(yScale));
+
+  svg.append("path")
+      .datum(dataArray)
+      .attr("class", "line")
+      .attr("d", line);
 }

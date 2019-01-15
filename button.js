@@ -23,7 +23,7 @@ function toYear() {
     x.remove(0);
   };
 
-  let options = ["2002", "2008", "2012", "2014", "2016"];
+  let options = ["2016", "2014", "2012", "2008", "2002"];
   length = options.length;
   for (i = 0; i < length; i++) {
     let option = document.createElement("option");

@@ -8,8 +8,8 @@ img {
 
 .pieChart {
   position:absolute;
-  bottom:60%;
-  right:10%;
+  top:5%;
+  left:750px;
 }
 
 .backButton {
@@ -26,4 +26,11 @@ img {
   border-style:solid;
   border-width:thin;
   border-color:black;
+  padding:3px;
+}
+
+.line {
+    fill: none;
+    stroke:black;
+    stroke-width: 2px;
 }
