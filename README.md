@@ -36,7 +36,7 @@ The shapefiles were converted to geojsons and the leefbaarheidsscores were conve
 d3-tip
 
 ### similar visualisations
-none
+https://www.leefbaarometer.nl/kaart/#kaart
 
 ### hardest parts
 Interpreting the shapefile included in the data and visualising the map

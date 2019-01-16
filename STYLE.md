@@ -12,7 +12,6 @@
 ## D3
 * Create no more than one new element with each block
 * Put each new method on its own indented line.
-* Assign each new element a class name identical to the block name
 * if a new selection is made, methods on it should have a 6 space indent instead of 4
 
 ## links

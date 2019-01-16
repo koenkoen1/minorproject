@@ -2,14 +2,15 @@
   position:relative;
 }
 
-img {
-  margin:10px
-}
-
 .pieChart {
   position:absolute;
   top:5%;
   left:750px;
+}
+
+.lineChart {
+  position:absolute;
+  bottom:0;
 }
 
 .backButton {
@@ -30,7 +31,11 @@ img {
 }
 
 .line {
-    fill: none;
-    stroke:black;
-    stroke-width: 2px;
+  fill: none;
+  stroke:black;
+  stroke-width: 2px;
+}
+
+.tick line{
+  opacity: 0.2;
 }

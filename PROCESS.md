@@ -24,3 +24,6 @@ I changed the way 'leefbaarheid'-scores are formatted in the json from [{name: p
 
 # Day 7
 Styleguide
+
+# Day 8
+I want to make it that if you hover over the piechart, all paths with the same colour light up.
