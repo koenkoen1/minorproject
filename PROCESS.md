@@ -30,4 +30,5 @@ I want to make it that if you hover over the piechart, all paths with the same c
 
 # Day 9
 At first I wanted to make a map of municipalities, which when clicked would change to a map of the municipality that was clicked. However, I can't actually create the maps.  
-So now I will use a map of all districts and simply zoom in when a district in a municipality is clicked
+So now I will use a map of all districts and a map of all municipalities. the district map will initially be invisible and only the municipality map can be interacted with.  
+Once a municipality is clicked, the map will zoom in on the municipality, the municipality map will become invisible and the district map visible. At that point only the district map will be interactable. I put the map in the html and made it invisible, but I have not yet implemented the rest.

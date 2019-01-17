@@ -119,7 +119,7 @@ function createPieGraph(data) {
 }
 
 function updatePieGraph(data, stat) {
-  console.log(data, stat)
+  // count data entries with the same score
   let counter = {}
   for (let key in data) {
     counter[data[key][stat]] = counter[data[key][stat]] + 1 || 0;
@@ -134,31 +134,30 @@ function updatePieGraph(data, stat) {
     dataArray.push(object)
   }
 
+  // define the radii of the pie chart
   let arc = d3.arc()
       .innerRadius(0)
       .outerRadius(200)
 
+  // let d3 figure out how the pie chart should be drawn
   let arcs = d3.pie().value(function(d) { return d.value; })
     .sort(function(a, b) { return a.number.localeCompare(b.number); })(dataArray);
 
-  console.log(arcs)
+  // selection
+  let path = d3.select(".pieChart").select("g").selectAll("path").data(arcs)
 
-  d3.select(".pieChart")
-      .select("g")
-        .selectAll("path")
-        .data(arcs)
-          .enter().append("path")
+  // add new slices if necessary
+  path.enter().append("path")
           .attr("d", arc)
+          .attr("fill", function(d) {
+            return mapColours[d.data.number - 4];
+          })
 
-	d3.select(".pieChart")
-      .selectAll("path")
-      .data(arcs)
-      .attr("fill", function(d) {
-        return mapColours[d.data.number - 4];
-      })
-      .attr("d", arc)
-        .exit().remove()
+  // remove obsolete slices
+  path.exit().remove()
 
+  // change size of slices
+  path.attr("d", arc)
 }
 
 function createLineGraph(data) {
