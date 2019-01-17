@@ -25,6 +25,7 @@ window.onload = function() {
 
     // changes the colours of each path in the map
     function dataChange(stat) {
+      updatePieGraph(response[0], stat)
       selection.each(function() {
         let score = response[0][this.getAttribute('cbs')][stat]
         d3.select(this).attr("fill", mapColours[score - 4])
@@ -112,8 +113,52 @@ function createPieGraph(data) {
         .attr("fill", function(d) {
           return mapColours[d.data.number - 4];
         })
+        .attr("class", "arc")
         .attr("stroke", "white")
         .attr("d", arc)
+}
+
+function updatePieGraph(data, stat) {
+  console.log(data, stat)
+  let counter = {}
+  for (let key in data) {
+    counter[data[key][stat]] = counter[data[key][stat]] + 1 || 0;
+  };
+
+  // parse counted value into d3-compatible format
+  let dataArray = []
+  for (let number in counter) {
+    let object = {}
+    object["number"] = number;
+    object["value"] = counter[number];
+    dataArray.push(object)
+  }
+
+  let arc = d3.arc()
+      .innerRadius(0)
+      .outerRadius(200)
+
+  let arcs = d3.pie().value(function(d) { return d.value; })
+    .sort(function(a, b) { return a.number.localeCompare(b.number); })(dataArray);
+
+  console.log(arcs)
+
+  d3.select(".pieChart")
+      .select("g")
+        .selectAll("path")
+        .data(arcs)
+          .enter().append("path")
+          .attr("d", arc)
+
+	d3.select(".pieChart")
+      .selectAll("path")
+      .data(arcs)
+      .attr("fill", function(d) {
+        return mapColours[d.data.number - 4];
+      })
+      .attr("d", arc)
+        .exit().remove()
+
 }
 
 function createLineGraph(data) {
