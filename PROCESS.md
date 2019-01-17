@@ -26,4 +26,8 @@ I changed the way 'leefbaarheid'-scores are formatted in the json from [{name: p
 Styleguide
 
 # Day 8
-I want to make it that if you hover over the piechart, all paths with the same colour light up.
+I want to make it that if you hover over the piechart, all paths with the same colour light up. But I have not implemented that yet.
+
+# Day 9
+At first I wanted to make a map of municipalities, which when clicked would change to a map of the municipality that was clicked. However, I can't actually create the maps.  
+So now I will use a map of all districts and simply zoom in when a district in a municipality is clicked

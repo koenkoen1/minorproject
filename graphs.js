@@ -13,7 +13,6 @@ window.onload = function() {
 
     // iterate over all paths in map
     selection.each(function() {
-
       // create onclick, which updates the line- and piechart
       d3.select(this).on("click", function() {
         let lineChart = d3.select(".lineChart")
@@ -160,13 +159,13 @@ function createLineGraph(data) {
   svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + (h - margin) + ")")
-      .call(d3.axisBottom(xScale).tickFormat(d3.format("d")).tickSize(-h + margin))
+      .call(d3.axisBottom(xScale).tickFormat(d3.format("d")).tickSize(-h + 2 * margin))
 
   // y axis
   svg.append("g")
       .attr("class", "y axis")
       .attr("transform", "translate(" + margin + ", 0)")
-      .call(d3.axisLeft(yScale).tickSize(-w + margin));
+      .call(d3.axisLeft(yScale).tickSize(-w + 2 * margin));
 
   // the actual line
   svg.append("path")

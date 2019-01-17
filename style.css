@@ -10,7 +10,8 @@
 
 .lineChart {
   position:absolute;
-  bottom:0;
+  top:500px;
+  left:666px;
 }
 
 .backButton {
@@ -38,4 +39,12 @@
 
 .tick line{
   opacity: 0.2;
+}
+
+.map {
+  position: absolute;
+}
+
+#wijken {
+  visibility: hidden;
 }
