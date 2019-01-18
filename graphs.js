@@ -126,6 +126,8 @@ function createPieGraph(data) {
         .attr("class", "arc")
         .attr("stroke", "white")
         .attr("d", arc)
+
+  updatePieGraph(data, 'KL16')
 }
 
 function updatePieGraph(data, stat) {
@@ -153,10 +155,13 @@ function updatePieGraph(data, stat) {
   let arcs = d3.pie().value(function(d) { return d.value; })
     .sort(function(a, b) { return a.number.localeCompare(b.number); })(dataArray);
 
+  console.log(arcs)
+
   // selection
   let path = d3.select(".pieChart").select("g").selectAll("path").data(arcs)
 
   // add new slices if necessary
+  console.log(path)
   path.enter().append("path")
           .transition()
           .duration(750)
@@ -190,7 +195,7 @@ function updatePieGraph(data, stat) {
       return arc(i(t));
     };
   }
-  
+
   function arcTweenIn(a) {
     var i = d3.interpolate({startAngle: Math.PI * 2, endAngle: Math.PI * 2, value: 0}, a);
     this._current = i(0);
