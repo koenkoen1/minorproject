@@ -18,8 +18,11 @@ window.onload = function() {
         let lineChart = d3.select(".lineChart")
         if (lineChart.empty()) {
           createLineGraph(response[0][this.getAttribute('cbs')]);
-        };
-        document.getElementById("back").innerHTML = "<button type='button' onclick='toCountry()'>Back</button>";
+        } else {
+          updateLineGraph(response[0][this.getAttribute('cbs')]);
+          document.getElementById("lineChart").style.visibility = "visible";
+        }
+        document.getElementById("back").innerHTML = "<button type='button' class='backButton'>Back</button>";
       });
     });
 
@@ -53,12 +56,19 @@ window.onload = function() {
       };
     });
 
+    // dropdown for selecting a year
     d3.select('#year').on("change", function() {
       let dropDown = document.getElementById("year");
       let selectedYear  = dropDown.options[dropDown.selectedIndex].value;
       let dictionary = ['KL16','KL14', 'KL12', 'KL08', 'KL02', 'VKL0216', 'VKL0208', 'VKL0812', 'VKL1214', 'VKL1416']
       dataChange(dictionary[selectedYear]);
     });
+
+    // button to (go to municipality map and) hide linechart and this button
+    d3.select('.backButton').on("click", function() {
+      document.getElementById("back").innerHTML = ""
+      document.getElementById("lineChart").style.visibility = "hidden";
+    })
 
     // create piechart
     createPieGraph(response[0])
@@ -148,16 +158,47 @@ function updatePieGraph(data, stat) {
 
   // add new slices if necessary
   path.enter().append("path")
-          .attr("d", arc)
+          .transition()
+          .duration(750)
+          .attrTween("d", arcTweenIn)
           .attr("fill", function(d) {
             return mapColours[d.data.number - 4];
           })
 
   // remove obsolete slices
-  path.exit().remove()
+  path.exit().transition()
+      .duration(750)
+      .attrTween("d", arcTweenOut)
+      .remove();
 
-  // change size of slices
-  path.attr("d", arc)
+  path.transition()
+      .duration(750)
+      .attrTween("d", arcTween);
+
+  function arcTween(a) {
+    var i = d3.interpolate(this._current, a);
+    this._current = i(0);
+    return function(t) {
+      return arc(i(t));
+    };
+  }
+
+  function arcTweenOut(a) {
+    var i = d3.interpolate(this._current, {startAngle: Math.PI * 2, endAngle: Math.PI * 2, value: 0});
+    this._current = i(0);
+    return function (t) {
+      return arc(i(t));
+    };
+  }
+  
+  function arcTweenIn(a) {
+    var i = d3.interpolate({startAngle: Math.PI * 2, endAngle: Math.PI * 2, value: 0}, a);
+    this._current = i(0);
+    return function (t) {
+      return arc(i(t));
+    };
+  }
+
 }
 
 function createLineGraph(data) {
@@ -198,6 +239,7 @@ function createLineGraph(data) {
       .attr("width", w + 2 * margin)
       .attr("height", h + 2 * margin)
       .attr("class", "lineChart")
+      .attr("id", "lineChart")
 
   // x axis
   svg.append("g")
@@ -218,6 +260,46 @@ function createLineGraph(data) {
       .attr("d", line);
 }
 
+function updateLineGraph(data) {
+  // width, height and the margin for text
+  let w = 600,
+    h = 300,
+    margin = 25;
+
+  // prune and reparse data into d3-compatible format
+  let dataArray = [];
+  for (let key in data) {
+    let object = {},
+      splitKey = key.split("L");
+    if (key[0] === "K") {
+      object["value"] = data[key];
+      object["year"] = parseInt(splitKey[1]) + 2000;
+      dataArray.push(object)
+    }
+  }
+
+  // x scale
+  let xScale = d3.scaleLinear()
+      .domain([2002, 2016])
+      .range([margin, w - margin])
+
+  // y scale
+  let yScale = d3.scaleLinear()
+      .domain([0, 10])
+      .range([h - margin, margin]);
+
+  // function that will create the path of the line
+  let line = d3.line()
+      .x(function(d) { return xScale(d.year); })
+      .y(function(d) { return yScale(d.value); })
+
+  d3.select("#lineChart")
+      .select(".line")
+        .datum(dataArray)
+        .transition()
+        .attr("d", line);
+}
+
 function modeChange(options, addition) {
   let dropdown = document.getElementById("year");
   let length = dropdown.options.length;
@@ -232,4 +314,8 @@ function modeChange(options, addition) {
     option.value = i + addition;
     dropdown.add(option);
   };
+}
+
+function mapZoom() {
+
 }
