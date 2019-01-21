@@ -1,4 +1,4 @@
-const mapColours = ['#ffffcc','#d9f0a3','#addd8e','#78c679','#31a354','#006837']
+const mapColours = ['#ffffff', '#d73027','#f46d43','#fdae61','#fee08b','#ffffbf','#d9ef8b','#a6d96a','#66bd63','#1a9850']
 
 window.onload = function() {
   // data loading promises
@@ -8,7 +8,9 @@ window.onload = function() {
     console.log(response);
 
     // select all paths in the map
-    let selection = d3.select(document.getElementById("map").contentDocument)
+    let selection = d3.select(document.getElementById("municipalities").contentDocument)
+                      .selectAll("path");
+    let selection2 = d3.select(document.getElementById("districts").contentDocument)
                       .selectAll("path");
 
     // iterate over all paths in map
@@ -26,12 +28,34 @@ window.onload = function() {
       });
     });
 
-    // changes the colours of each path in the map
+    // css failed, now using d3
+    selection2.attr("stroke", "#6e6e6e");
+
+    selection2.each(function() {
+      d3.select(this).on("click", function() {
+        let lineChart = d3.select(".lineChart")
+        let areaCodes = this.getAttribute('id').split("|")
+        if (lineChart.empty()) {
+          createLineGraph(response[1][areaCodes[1]]);
+        } else {
+          updateLineGraph(response[1][areaCodes[1]]);
+          document.getElementById("lineChart").style.visibility = "visible";
+        }
+        document.getElementById("back").innerHTML = "<button type='button' class='backButton'>Back</button>";
+      })
+    })
+
+    // update map and piechart with the new stat
     function dataChange(stat) {
-      updatePieGraph(response[0], stat)
+      updatePieGraph(response[1], stat);
       selection.each(function() {
-        let score = response[0][this.getAttribute('cbs')][stat]
-        d3.select(this).attr("fill", mapColours[score - 4])
+        let score = response[0][this.getAttribute('cbs')][stat];
+        d3.select(this).attr("fill", mapColours[score]);
+      });
+      selection2.each(function() {
+        let areaCodes = this.getAttribute('id').split("|")
+        let score = response[1][areaCodes[1]][stat] || 0
+        d3.select(this).attr("fill", mapColours[score]);
       })
     }
 
@@ -71,14 +95,14 @@ window.onload = function() {
     })
 
     // create piechart
-    createPieGraph(response[0])
+    createPieGraph(response[1])
   });
 }
 
 function createPieGraph(data) {
   // width, height and radius
-  let w = 400,
-    h = 400,
+  let w = 700,
+    h = 700,
     r = 200;
 
   // initialize svg
@@ -90,6 +114,13 @@ function createPieGraph(data) {
 
   // start in the middle of the svg
   const g = svg.append("g")
+      .attr("class", "slices")
+      .attr("transform", `translate(${w / 2},${h / 2})`);
+  svg.append("g")
+      .attr("class", "labels")
+      .attr("transform", `translate(${w / 2},${h / 2})`);
+  svg.append("g")
+      .attr("class", "lines")
       .attr("transform", `translate(${w / 2},${h / 2})`);
 
   // count data entries with the same score
@@ -97,6 +128,10 @@ function createPieGraph(data) {
   for (let key in data) {
     counter[data[key]['KL16']] = counter[data[key]['KL16']] + 1 || 0;
   };
+
+  Object.defineProperty(counter, "0",
+      Object.getOwnPropertyDescriptor(counter, "null"));
+  delete counter["null"];
 
   // parse counted value into d3-compatible format
   let dataArray = []
@@ -121,11 +156,13 @@ function createPieGraph(data) {
       .data(arcs)
       .enter().append("path")
         .attr("fill", function(d) {
-          return mapColours[d.data.number - 4];
+          return mapColours[d.data.number];
         })
         .attr("class", "arc")
         .attr("stroke", "white")
         .attr("d", arc)
+        .append("title")
+          .text(function(d) { return d.data.number; })
 
   updatePieGraph(data, 'KL16')
 }
@@ -136,6 +173,10 @@ function updatePieGraph(data, stat) {
   for (let key in data) {
     counter[data[key][stat]] = counter[data[key][stat]] + 1 || 0;
   };
+
+  Object.defineProperty(counter, "0",
+      Object.getOwnPropertyDescriptor(counter, "null"));
+  delete counter["null"];
 
   // parse counted value into d3-compatible format
   let dataArray = []
@@ -151,59 +192,104 @@ function updatePieGraph(data, stat) {
       .innerRadius(0)
       .outerRadius(200)
 
+  let outerArc = d3.arc()
+    	.innerRadius(270)
+    	.outerRadius(270);
+
   // let d3 figure out how the pie chart should be drawn
   let arcs = d3.pie().value(function(d) { return d.value; })
     .sort(function(a, b) { return a.number.localeCompare(b.number); })(dataArray);
 
-  console.log(arcs)
-
   // selection
-  let path = d3.select(".pieChart").select("g").selectAll("path").data(arcs)
+  let path = d3.select(".pieChart").select(".slices").selectAll("path").data(arcs)
+
 
   // add new slices if necessary
-  console.log(path)
   path.enter().append("path")
           .transition()
           .duration(750)
-          .attrTween("d", arcTweenIn)
+          .attrTween("d", function(a) {
+            var i = d3.interpolate({startAngle: Math.PI * 2, endAngle: Math.PI * 2, value: 0}, a);
+            this._current = i(0);
+            return function (t) {
+              return arc(i(t));
+            };
+          })
           .attr("fill", function(d) {
-            return mapColours[d.data.number - 4];
+            return mapColours[d.data.number];
           })
 
   // remove obsolete slices
   path.exit().transition()
       .duration(750)
-      .attrTween("d", arcTweenOut)
+      .attrTween("d", function(a) {
+        var i = d3.interpolate(this._current, {startAngle: Math.PI * 2, endAngle: Math.PI * 2, value: 0});
+        this._current = i(0);
+        return function (t) {
+          return arc(i(t));
+        };
+      })
       .remove();
 
   path.transition()
       .duration(750)
-      .attrTween("d", arcTween);
+      .attrTween("d", function(a) {
+        var i = d3.interpolate(this._current, a);
+        this._current = i(0);
+        return function(t) {
+          return arc(i(t));
+        };
+      });
 
-  function arcTween(a) {
-    var i = d3.interpolate(this._current, a);
-    this._current = i(0);
-    return function(t) {
-      return arc(i(t));
-    };
+  let text = d3.select(".pieChart").select(".labels").selectAll("text")
+		  .data(arcs)
+
+  let legend = {
+    VK:  ["large regression", "regression", "possible regression", "no development", "possible progression", "progression", "large progression"],
+    K: ["Very insufficient", "largely insufficient", "insufficient", "somewhat lacking", "sufficient", "more than sufficient", "good", "very good", "excellent"]
   }
 
-  function arcTweenOut(a) {
-    var i = d3.interpolate(this._current, {startAngle: Math.PI * 2, endAngle: Math.PI * 2, value: 0});
-    this._current = i(0);
-    return function (t) {
-      return arc(i(t));
-    };
-  }
+  let mode = stat.split("L")[0]
 
-  function arcTweenIn(a) {
-    var i = d3.interpolate({startAngle: Math.PI * 2, endAngle: Math.PI * 2, value: 0}, a);
-    this._current = i(0);
-    return function (t) {
-      return arc(i(t));
-    };
-  }
+  text.enter()
+		  .append("text")
+		  .text(function(d) {
+  			return legend[mode][d.data.number - 1];
+  		});
 
+  function midAngle(d){
+		return d.startAngle + (d.endAngle - d.startAngle)/2;
+	}
+
+  function getAngle(d) {
+    let angle = (180 / Math.PI * (d.startAngle + d.endAngle) / 2 - 90);
+        if (angle > 180) {
+      angle = angle - 180;
+    };
+    return angle;
+  };
+
+  text.transition().duration(1000)
+		.attrTween("transform", function(a) {
+			this._current = this._current || a;
+			var i = d3.interpolate(this._current, a);
+			this._current = i(0);
+			return function(t) {
+				var a2 = i(t);
+				var pos = outerArc.centroid(a2);
+				return "translate("+ pos +") " +
+                "rotate("+ getAngle(a) +")";
+			};
+		})
+		.style("text-anchor", "middle")
+    .text(function(d) {
+      if ((d.endAngle - d.startAngle) > 0.05) {
+        return legend[mode][d.data.number - 1];
+      }
+    });
+
+  text.exit()
+		.remove();
 }
 
 function createLineGraph(data) {
@@ -236,6 +322,7 @@ function createLineGraph(data) {
 
   // function that will create the path of the line
   let line = d3.line()
+      .defined(function(d) { return d.value; })
       .x(function(d) { return xScale(d.year); })
       .y(function(d) { return yScale(d.value); })
 
@@ -295,6 +382,7 @@ function updateLineGraph(data) {
 
   // function that will create the path of the line
   let line = d3.line()
+      .defined(function(d) { return d.value !== null; })
       .x(function(d) { return xScale(d.year); })
       .y(function(d) { return yScale(d.value); })
 

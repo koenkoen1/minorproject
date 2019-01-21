@@ -45,6 +45,11 @@
   position: absolute;
 }
 
-#invisible {
+.invisible {
+  position: absolute;
   visibility: hidden;
+}
+
+g > path {
+  stroke: #6e6e6e;
 }
