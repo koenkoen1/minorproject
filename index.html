@@ -15,20 +15,20 @@ This will hold my graphs
     <title>leefbaarheid</title>
   </head>
   <body>
-    <div class="buttons">
-      <select id="year" name="year">
-        <option selected disabled>Year</option>
-        <option value="4">2002</option>
-        <option value="3">2008</option>
-        <option value="2">2012</option>
-        <option value="1">2014</option>
-        <option value="0">2016</option>
-      </select>
-      <button type="button" id="changeMode">Mode</button>
-    </div>
     <div id="graphs" class="graphs">
-      <object data="data/Nederland_gemeenten_2016.svg" type="image/svg+xml" id="municipalities" class="invisible"></object>
-      <object data="data/wijk_2016.svg" type="image/svg+xml" id="districts" class="map"></object>
+      <div class="buttons">
+        <select id="year" name="year">
+          <option selected disabled>Year</option>
+          <option value="4">2002</option>
+          <option value="3">2008</option>
+          <option value="2">2012</option>
+          <option value="1">2014</option>
+          <option value="0">2016</option>
+        </select>
+        <button type="button" id="changeMode">Mode</button>
+      </div>
+      <object data="data/Nederland_gemeenten_2016.svg" type="image/svg+xml" id="municipalities" class="map"></object>
+      <object data="data/wijk_2016.svg" type="image/svg+xml" id="districts" class="invisible"></object>
       <div id="back" class="backButton"></div>
     </div>
     <div class="dataSauce">

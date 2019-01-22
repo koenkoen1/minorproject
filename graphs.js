@@ -17,10 +17,14 @@ window.onload = function() {
     let selection2 = d3.select(document.getElementById("districts").contentDocument)
                       .selectAll("path");
 
+    // map is not zoomed in
+    let centered = null;
+
     // iterate over all paths in map
     selection.each(function() {
       // create onclick, which updates the line- and piechart
       d3.select(this).on("click", function() {
+        centered = mapZoom(this, centered)
         let lineChart = d3.select(".lineChart")
         if (lineChart.empty()) {
           createLineGraph(response[0][this.getAttribute('cbs')]);
@@ -34,9 +38,6 @@ window.onload = function() {
 
     // css failed, now using d3
     selection2.attr("stroke", "#6e6e6e");
-
-    // map is not zoomed in
-    let centered = null;
 
     // create onclick for every district to update line- and pie chart
     selection2.each(function() {
@@ -96,7 +97,7 @@ window.onload = function() {
 
     // button to (go to municipality map and) hide linechart and this button
     d3.select('.backButton').on("click", function() {
-      centered = mapZoom(null, centered)
+      centered = mapZoom({id: centered}, centered)
       document.getElementById("back").innerHTML = ""
       document.getElementById("lineChart").style.visibility = "hidden";
     })
@@ -111,9 +112,9 @@ window.onload = function() {
 
 function createPieGraph(data) {
   // width, height and radius
-  let w = 600,
-    h = 600,
-    r = 150;
+  let w = 400,
+    h = 400,
+    r = 200;
 
   // initialize svg
   const svg = d3.select(".graphs")
@@ -205,11 +206,11 @@ function updatePieGraph(data, stat) {
   // define the radii of the pie chart
   let arc = d3.arc()
       .innerRadius(0)
-      .outerRadius(150)
+      .outerRadius(200)
 
   let outerArc = d3.arc()
-    	.innerRadius(215)
-    	.outerRadius(215);
+    	.innerRadius(125)
+    	.outerRadius(125);
 
   // let d3 figure out how the pie chart should be drawn
   let arcs = d3.pie().value(function(d) { return d.value; })
@@ -296,7 +297,7 @@ function updatePieGraph(data, stat) {
 		})
 		.style("text-anchor", "middle")
     .text(function(d) {
-      if ((d.endAngle - d.startAngle) > 0.05) {
+      if ((d.endAngle - d.startAngle) > 0.1) {
         return legend[mode][d.data.number - 1];
       }
     });
@@ -425,19 +426,30 @@ function modeChange(options, addition) {
 function mapZoom(clicked, centered) {
   let x, y, k,
     w = 700,
-    h = 820;
+    h = 820,
+    id = clicked.id || clicked.getAttribute('cbs')
 
-  if (clicked && centered !== clicked.id) {
+  if (id && centered !== id) {
     let bBox = clicked.getBBox();
-    x = bBox.x + bBox.width/2;
-    y = bBox.y + bBox.height/2;
+    console.log(bBox)
+    if (clicked.id) {
+      x = bBox.x + bBox.width/2;
+      y = bBox.y + bBox.height/2;
+    } else {
+      x = (bBox.x + bBox.width/2 - 65) * 820 / 510
+      y = (bBox.y + bBox.height/2 - 30) * 955 / 605
+    }
     k = 6;
-    centered = clicked.id;
+    centered = id;
+    d3.select("#municipalities").attr("class", "invisible")
+    d3.select("#districts").attr("class", "map")
   } else {
     x = w / 2;
     y = h / 2;
     k = 1;
     centered = null;
+    d3.select("#municipalities").attr("class", "map")
+    d3.select("#districts").attr("class", "invisible")
   }
 
   d3.select(document.getElementById("districts").contentDocument)

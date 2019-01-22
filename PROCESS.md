@@ -42,4 +42,5 @@ Currently using the district map instead of the municipality map.
 Added labels to pie chart, but not all of them. I had to prevent overlap somehow... right?
 
 # Day 12
-I have decided that I will scrap the municipality map if I lack time.
+Readded municipality map and it switches to district map if it is clicked. This is what i originally intended, but gave up on.
+Now I still have to make the pie chart switch to "municipality mode" instead of always showing the distribution in the country.

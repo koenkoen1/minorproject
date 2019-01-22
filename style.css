@@ -5,12 +5,12 @@
 .pieChart {
   position:absolute;
   top:0;
-  left:700px;
+  left:800px;
 }
 
 .lineChart {
   position:absolute;
-  top:550px;
+  top:400px;
   left:700px;
 }
 
@@ -43,6 +43,8 @@
 
 .map {
   position: absolute;
+  top: 0;
+  z-index: -1;
 }
 
 .invisible {
