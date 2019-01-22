@@ -98,7 +98,7 @@ window.onload = function() {
     // button to (go to municipality map and) hide linechart and this button
     d3.select('.backButton').on("click", function() {
       centered = mapZoom({id: centered}, centered)
-      document.getElementById("back").innerHTML = ""
+      document.getElementById("back").innerHTML = "";
       document.getElementById("lineChart").style.visibility = "hidden";
     })
 
@@ -431,7 +431,6 @@ function mapZoom(clicked, centered) {
 
   if (id && centered !== id) {
     let bBox = clicked.getBBox();
-    console.log(bBox)
     if (clicked.id) {
       x = bBox.x + bBox.width/2;
       y = bBox.y + bBox.height/2;
@@ -447,17 +446,20 @@ function mapZoom(clicked, centered) {
     x = w / 2;
     y = h / 2;
     k = 1;
-    centered = null;
+    centered = {id:null};
     d3.select("#municipalities").attr("class", "map")
     d3.select("#districts").attr("class", "invisible")
   }
 
-  d3.select(document.getElementById("districts").contentDocument)
+  selection = d3.select(document.getElementById("districts").contentDocument)
       .select("g")
-        .transition()
-          .duration(750)
-          .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
-          .style("stroke-width", 1.5 / k + "px");
+
+  selection.selectAll()
+
+  selection.transition()
+      .duration(1000)
+      .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+      .style("stroke-width", 1.5 / k + "px");
 
   return centered
 }
