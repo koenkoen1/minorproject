@@ -1,4 +1,8 @@
 const mapColours = ['#ffffff', '#d73027','#f46d43','#fdae61','#fee08b','#ffffbf','#d9ef8b','#a6d96a','#66bd63','#1a9850']
+const legend = {
+  VK:  ["large regression", "regression", "possible regression", "no development", "possible progression", "progression", "large progression"],
+  K: ["Very insufficient", "largely insufficient", "insufficient", "somewhat lacking", "sufficient", "more than sufficient", "good", "very good", "excellent"]
+}
 
 window.onload = function() {
   // data loading promises
@@ -59,9 +63,6 @@ window.onload = function() {
       })
     }
 
-    // initial colours of the map
-    dataChange('KL16')
-
     // needed references for the following button
     let currentMode = 'KL16',
       options1 = ["2002-2016", "2002-2008", "2008-2012", "2012-2014", "2014-2016"],
@@ -96,6 +97,9 @@ window.onload = function() {
 
     // create piechart
     createPieGraph(response[1])
+
+    // initial colours of the map
+    dataChange('KL16')
   });
 }
 
@@ -164,7 +168,14 @@ function createPieGraph(data) {
         .append("title")
           .text(function(d) { return d.data.number; })
 
-  updatePieGraph(data, 'KL16')
+  let text = d3.select(".pieChart").select(".labels").selectAll("text")
+      .data(arcs)
+
+  text.enter()
+		  .append("text")
+		  .text(function(d) {
+  			return legend['VK'][d.data.number - 1];
+  		});
 }
 
 function updatePieGraph(data, stat) {
@@ -203,7 +214,6 @@ function updatePieGraph(data, stat) {
   // selection
   let path = d3.select(".pieChart").select(".slices").selectAll("path").data(arcs)
 
-
   // add new slices if necessary
   path.enter().append("path")
           .transition()
@@ -239,15 +249,13 @@ function updatePieGraph(data, stat) {
         return function(t) {
           return arc(i(t));
         };
-      });
+      })
+      .attr("fill", function(d) {
+        return mapColours[d.data.number];
+      })
 
   let text = d3.select(".pieChart").select(".labels").selectAll("text")
 		  .data(arcs)
-
-  let legend = {
-    VK:  ["large regression", "regression", "possible regression", "no development", "possible progression", "progression", "large progression"],
-    K: ["Very insufficient", "largely insufficient", "insufficient", "somewhat lacking", "sufficient", "more than sufficient", "good", "very good", "excellent"]
-  }
 
   let mode = stat.split("L")[0]
 
