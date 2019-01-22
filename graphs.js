@@ -35,8 +35,13 @@ window.onload = function() {
     // css failed, now using d3
     selection2.attr("stroke", "#6e6e6e");
 
+    // map is not zoomed in
+    let centered = null;
+
+    // create onclick for every district to update line- and pie chart
     selection2.each(function() {
       d3.select(this).on("click", function() {
+        centered = mapZoom(this, centered);
         let lineChart = d3.select(".lineChart")
         let areaCodes = this.getAttribute('id').split("|")
         if (lineChart.empty()) {
@@ -91,6 +96,7 @@ window.onload = function() {
 
     // button to (go to municipality map and) hide linechart and this button
     d3.select('.backButton').on("click", function() {
+      centered = mapZoom(null, centered)
       document.getElementById("back").innerHTML = ""
       document.getElementById("lineChart").style.visibility = "hidden";
     })
@@ -105,9 +111,9 @@ window.onload = function() {
 
 function createPieGraph(data) {
   // width, height and radius
-  let w = 700,
-    h = 700,
-    r = 200;
+  let w = 600,
+    h = 600,
+    r = 150;
 
   // initialize svg
   const svg = d3.select(".graphs")
@@ -165,8 +171,6 @@ function createPieGraph(data) {
         .attr("class", "arc")
         .attr("stroke", "white")
         .attr("d", arc)
-        .append("title")
-          .text(function(d) { return d.data.number; })
 
   let text = d3.select(".pieChart").select(".labels").selectAll("text")
       .data(arcs)
@@ -201,11 +205,11 @@ function updatePieGraph(data, stat) {
   // define the radii of the pie chart
   let arc = d3.arc()
       .innerRadius(0)
-      .outerRadius(200)
+      .outerRadius(150)
 
   let outerArc = d3.arc()
-    	.innerRadius(270)
-    	.outerRadius(270);
+    	.innerRadius(215)
+    	.outerRadius(215);
 
   // let d3 figure out how the pie chart should be drawn
   let arcs = d3.pie().value(function(d) { return d.value; })
@@ -263,7 +267,8 @@ function updatePieGraph(data, stat) {
 		  .append("text")
 		  .text(function(d) {
   			return legend[mode][d.data.number - 1];
-  		});
+  		})
+
 
   function midAngle(d){
 		return d.startAngle + (d.endAngle - d.startAngle)/2;
@@ -417,6 +422,30 @@ function modeChange(options, addition) {
   };
 }
 
-function mapZoom() {
+function mapZoom(clicked, centered) {
+  let x, y, k,
+    w = 700,
+    h = 820;
 
+  if (clicked && centered !== clicked.id) {
+    let bBox = clicked.getBBox();
+    x = bBox.x + bBox.width/2;
+    y = bBox.y + bBox.height/2;
+    k = 6;
+    centered = clicked.id;
+  } else {
+    x = w / 2;
+    y = h / 2;
+    k = 1;
+    centered = null;
+  }
+
+  d3.select(document.getElementById("districts").contentDocument)
+      .select("g")
+        .transition()
+          .duration(750)
+          .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+          .style("stroke-width", 1.5 / k + "px");
+
+  return centered
 }

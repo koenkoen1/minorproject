@@ -4,14 +4,14 @@
 
 .pieChart {
   position:absolute;
-  top:5%;
-  left:750px;
+  top:0;
+  left:700px;
 }
 
 .lineChart {
   position:absolute;
-  top:450px;
-  left:666px;
+  top:550px;
+  left:700px;
 }
 
 .backButton {

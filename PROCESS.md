@@ -40,3 +40,6 @@ Decided to put a transition in the line and pie chart.
 Css failed to work on the embedded map. Now using d3 to add borders between areas.  
 Currently using the district map instead of the municipality map.
 Added labels to pie chart, but not all of them. I had to prevent overlap somehow... right?
+
+# Day 12
+I have decided that I will scrap the municipality map if I lack time.
