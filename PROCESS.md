@@ -20,7 +20,7 @@ Tried converting the geojson to topojson, but there is no difference. After mult
 Now I will download a .svg from wikipedia, embed it in my html as <object> and alter it if possible for my own purposes.
 
 # Day 6
-I changed the way 'leefbaarheid'-scores are formatted in the json from [{name: place1, score1: 5, score2: 6, etc}, etc] to {place1: {score1 : 5, etc}, etc}. The former format was obtained when the .xlsx was converted to .json by an online converter, but the latter format is more useful due to being able to select a municipality by their name/code.  
+I changed the way 'leefbaarheid'-scores are formatted in the json from [{}] to {place1: {}, etc}. The former format was obtained when the .xlsx was converted to .json by an online converter, but the latter format is more useful due to being able to select a municipality by their name/code.  
 
 # Day 7
 Styleguide
@@ -42,6 +42,12 @@ Currently using the district map instead of the municipality map.
 Added labels to pie chart, but not all of them. I had to prevent overlap somehow... right?
 
 # Day 12
-Readded municipality map and it switches to district map if it is clicked. This is what i originally intended, but gave up on.  
+Readded municipality map and it switches to district map if it is clicked. This is what i originally intended, but had delayed implementing.  
 Now I still have to make the pie chart switch to "municipality mode" instead of always showing the distribution in the country.  
 known bugs: pie chart text sometimes shows up in the middle of the chart, back button does not disappear when you go back by clicking the same district twice.
+
+# Day 13
+Pie chart switches between modes successfully (disregarding the textbug).  
+I disabled zooming out when a district is clicked twice. That solves one of the bugs.  
+Added function that turns strokes of all districts in the selected municipality blue.  
+additional bug: the border of a district does not always appear blue if it borders a district in an unselected municipality

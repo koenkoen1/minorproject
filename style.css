@@ -5,19 +5,19 @@
 .pieChart {
   position:absolute;
   top:0;
-  left:800px;
+  left:700px;
 }
 
 .lineChart {
   position:absolute;
   top:400px;
-  left:700px;
+  left:600px;
 }
 
 .backButton {
   position:absolute;
-  top:11px;
-  left:11px;
+  top:15px;
+  left:5px;
 }
 
 .dataSauce {

@@ -17,14 +17,46 @@ window.onload = function() {
     let selection2 = d3.select(document.getElementById("districts").contentDocument)
                       .selectAll("path");
 
-    // map is not zoomed in
+    // map is not yet zoomed in
     let centered = null;
+
+    let dataset = response[0];
+    let currentStat = 'KL16'
+
+    function filterObject(data, code) {
+      let z = Object.keys(data).filter(function(k) {
+        return k.indexOf('WK' + code) == 0;
+      }).reduce(function(newData, k) {
+        newData[k] = data[k];
+        return newData;
+      }, {});
+      return z;
+    }
+
+    function strokeDists(data, code) {
+      d3.select(document.getElementById("districts").contentDocument)
+          .selectAll(".selected")
+          .attr("class", "")
+          .attr("stroke", "#6e6e6e")
+
+      Object.keys(data).filter(function(k) {
+        return k.indexOf('WK' + code) == 0;
+      }).forEach(function(element) {
+        let y = d3.select(document.getElementById("districts").contentDocument)
+            .select("#" + element)
+            .attr("class", "selected")
+            .attr("stroke", "blue")
+      })
+    };
 
     // iterate over all paths in map
     selection.each(function() {
       // create onclick, which updates the line- and piechart
       d3.select(this).on("click", function() {
-        centered = mapZoom(this, centered)
+        mapZoom(this)
+        strokeDists(response[1], this.getAttribute('cbs').slice(2))
+        dataset = filterObject(response[1], this.getAttribute('cbs').slice(2))
+        updatePieGraph(dataset, currentStat)
         let lineChart = d3.select(".lineChart")
         if (lineChart.empty()) {
           createLineGraph(response[0][this.getAttribute('cbs')]);
@@ -41,14 +73,18 @@ window.onload = function() {
 
     // create onclick for every district to update line- and pie chart
     selection2.each(function() {
+      this.id = this.id.slice(7)
       d3.select(this).on("click", function() {
-        centered = mapZoom(this, centered);
+        mapZoom(this);
+        strokeDists(response[1], this.id.slice(2, 6));
+        dataset = filterObject(response[1], this.id.slice(2, 6))
+        updatePieGraph(dataset, currentStat)
         let lineChart = d3.select(".lineChart")
-        let areaCodes = this.getAttribute('id').split("|")
+        let areaCode = this.getAttribute('id')
         if (lineChart.empty()) {
-          createLineGraph(response[1][areaCodes[1]]);
+          createLineGraph(response[1][areaCode]);
         } else {
-          updateLineGraph(response[1][areaCodes[1]]);
+          updateLineGraph(response[1][areaCode]);
           document.getElementById("lineChart").style.visibility = "visible";
         }
         document.getElementById("back").innerHTML = "<button type='button' class='backButton'>Back</button>";
@@ -57,14 +93,15 @@ window.onload = function() {
 
     // update map and piechart with the new stat
     function dataChange(stat) {
-      updatePieGraph(response[1], stat);
+      updatePieGraph(dataset, stat);
+      currentStat = stat
       selection.each(function() {
         let score = response[0][this.getAttribute('cbs')][stat];
         d3.select(this).attr("fill", mapColours[score]);
       });
       selection2.each(function() {
-        let areaCodes = this.getAttribute('id').split("|")
-        let score = response[1][areaCodes[1]][stat] || 0
+        let areaCode = this.getAttribute('id')
+        let score = response[1][areaCode][stat] || 0
         d3.select(this).attr("fill", mapColours[score]);
       })
     }
@@ -97,7 +134,9 @@ window.onload = function() {
 
     // button to (go to municipality map and) hide linechart and this button
     d3.select('.backButton').on("click", function() {
-      centered = mapZoom({id: centered}, centered)
+      mapZoom(null)
+      dataset = response[0]
+      updatePieGraph(dataset, currentStat)
       document.getElementById("back").innerHTML = "";
       document.getElementById("lineChart").style.visibility = "hidden";
     })
@@ -187,12 +226,10 @@ function updatePieGraph(data, stat) {
   // count data entries with the same score
   let counter = {}
   for (let key in data) {
-    counter[data[key][stat]] = counter[data[key][stat]] + 1 || 0;
+    counter[data[key][stat]] = counter[data[key][stat]] + 1 || 1;
   };
 
-  Object.defineProperty(counter, "0",
-      Object.getOwnPropertyDescriptor(counter, "null"));
-  delete counter["null"];
+  delete counter["null"]
 
   // parse counted value into d3-compatible format
   let dataArray = []
@@ -423,13 +460,14 @@ function modeChange(options, addition) {
   };
 }
 
-function mapZoom(clicked, centered) {
-  let x, y, k,
+function mapZoom(clicked) {
+  let x, y, k, id,
     w = 700,
-    h = 820,
-    id = clicked.id || clicked.getAttribute('cbs')
+    h = 820;
 
-  if (id && centered !== id) {
+  if (clicked) {
+    id = clicked.getAttribute('cbs') || clicked.id
+    console.log(id)
     let bBox = clicked.getBBox();
     if (clicked.id) {
       x = bBox.x + bBox.width/2;
@@ -439,14 +477,12 @@ function mapZoom(clicked, centered) {
       y = (bBox.y + bBox.height/2 - 30) * 955 / 605
     }
     k = 6;
-    centered = id;
     d3.select("#municipalities").attr("class", "invisible")
     d3.select("#districts").attr("class", "map")
   } else {
     x = w / 2;
     y = h / 2;
     k = 1;
-    centered = {id:null};
     d3.select("#municipalities").attr("class", "map")
     d3.select("#districts").attr("class", "invisible")
   }
@@ -454,12 +490,8 @@ function mapZoom(clicked, centered) {
   selection = d3.select(document.getElementById("districts").contentDocument)
       .select("g")
 
-  selection.selectAll()
-
   selection.transition()
       .duration(1000)
       .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
       .style("stroke-width", 1.5 / k + "px");
-
-  return centered
 }
