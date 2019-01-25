@@ -4,8 +4,15 @@
 
 .pieChart {
   position:absolute;
-  top:0;
+  top:20px;
   left:700px;
+}
+
+.areaName {
+  position:absolute;
+  text-anchor: middle;
+  top:0;
+  left:780px;
 }
 
 .lineChart {

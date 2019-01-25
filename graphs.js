@@ -51,12 +51,16 @@ window.onload = function() {
 
     // iterate over all paths in map
     selection.each(function() {
+      d3.select(this).attr("class", this.getAttribute('cbs'))
       // create onclick, which updates the line- and piechart
       d3.select(this).on("click", function() {
         mapZoom(this)
-        strokeDists(response[1], this.getAttribute('cbs').slice(2))
-        dataset = filterObject(response[1], this.getAttribute('cbs').slice(2))
+        let areaCode = this.getAttribute('cbs').slice(2)
+        strokeDists(response[1], areaCode)
+
+        dataset = filterObject(response[1], areaCode)
         updatePieGraph(dataset, currentStat)
+
         let lineChart = d3.select(".lineChart")
         if (lineChart.empty()) {
           createLineGraph(response[0][this.getAttribute('cbs')]);
@@ -64,6 +68,7 @@ window.onload = function() {
           updateLineGraph(response[0][this.getAttribute('cbs')]);
           document.getElementById("lineChart").style.visibility = "visible";
         }
+        document.getElementById("areaName").innerHTML = "Quality of life in " + this.getAttribute("gem")
         document.getElementById("back").innerHTML = "<button type='button' class='backButton'>Back</button>";
       });
     });
@@ -71,22 +76,35 @@ window.onload = function() {
     // css failed, now using d3
     selection2.attr("stroke", "#6e6e6e");
 
+    selection2.each(function() {
+      let name = this.id.slice(16)
+      if (name.slice(0, 4) == "Wijk") {
+        name = name.slice(8)
+      }
+      d3.select(this).attr("name", name)
+      d3.select(this).append("title").text(name)
+    })
+
     // create onclick for every district to update line- and pie chart
     selection2.each(function() {
-      this.id = this.id.slice(7)
+      this.id = this.id.slice(7, 15)
       d3.select(this).on("click", function() {
+        let areaCode = this.getAttribute('id')
         mapZoom(this);
-        strokeDists(response[1], this.id.slice(2, 6));
-        dataset = filterObject(response[1], this.id.slice(2, 6))
+        strokeDists(response[1], areaCode.slice(2, 6));
+        dataset = filterObject(response[1], areaCode.slice(2, 6))
         updatePieGraph(dataset, currentStat)
         let lineChart = d3.select(".lineChart")
-        let areaCode = this.getAttribute('id')
         if (lineChart.empty()) {
           createLineGraph(response[1][areaCode]);
         } else {
           updateLineGraph(response[1][areaCode]);
           document.getElementById("lineChart").style.visibility = "visible";
         }
+        let muniName = d3.select(document.getElementById("municipalities").contentDocument)
+          .select(".GM" + this.getAttribute("id").slice(2, 6))
+          .attr("gem")
+        document.getElementById("areaName").innerHTML = "Quality of life in " + muniName
         document.getElementById("back").innerHTML = "<button type='button' class='backButton'>Back</button>";
       })
     })
@@ -137,6 +155,7 @@ window.onload = function() {
       mapZoom(null)
       dataset = response[0]
       updatePieGraph(dataset, currentStat)
+      document.getElementById("areaName").innerHTML = "Quality of life in the whole country"
       document.getElementById("back").innerHTML = "";
       document.getElementById("lineChart").style.visibility = "hidden";
     })
