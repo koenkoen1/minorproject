@@ -51,3 +51,10 @@ Pie chart switches between modes successfully (disregarding the textbug).
 I disabled zooming out when a district is clicked twice. That solves one of the bugs.  
 Added function that turns strokes of all districts in the selected municipality blue.  
 additional bug: the border of a district does not always appear blue if it borders a district in an unselected municipality
+
+# Day 14
+Fixed pie chart text bug with a simple .merge()  
+Added district names to the map
+
+# Day 15
+Added some more comments
