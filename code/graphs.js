@@ -39,7 +39,7 @@ window.onload = function() {
       d3.select(document.getElementById("districts").contentDocument)
           .selectAll(".selected")
           .attr("class", "")
-          .attr("stroke", "#6e6e6e");
+          .style("opacity", 0.3);
 
       // turn border of selected districts to blue
       Object.keys(data).filter(function(k) {
@@ -48,7 +48,7 @@ window.onload = function() {
         let y = d3.select(document.getElementById("districts").contentDocument)
             .select("#" + element)
             .attr("class", "selected")
-            .attr("stroke", "blue");
+            .style("opacity", 1);
       });
     };
 
@@ -87,7 +87,8 @@ window.onload = function() {
     });
 
     // css failed due to embedding, now using d3 for strokes
-    selection2.attr("stroke", "#6e6e6e");
+    selection2.attr("stroke", "#6e6e6e")
+        .style("opacity", 0.3);
 
     // make the name of a district appear if it is hovered over
     selection2.each(function() {
@@ -441,11 +442,25 @@ function createLineGraph(data) {
       .attr("transform", "translate(0," + (h - margin) + ")")
       .call(d3.axisBottom(xScale).tickFormat(d3.format("d")).tickSize(-h + 2 * margin));
 
+  // x axis label
+  svg.append("text")
+      .attr("class", "x label")
+      .attr("transform", "translate(" + (w/2 - margin) + ", " + h + ")")
+      .text("Years");
+
   // y axis
   svg.append("g")
       .attr("class", "y axis")
       .attr("transform", "translate(" + margin + ", 0)")
       .call(d3.axisLeft(yScale).tickSize(-w + 2 * margin));
+
+  // y axis label
+  svg.append("text")
+      .attr("class", "x label")
+      .attr("x", -h/1.4)
+      .attr("y", 10)
+      .attr("transform", "rotate(-90)")
+      .text("Quality of Life score");
 
   // the actual line
   svg.append("path")

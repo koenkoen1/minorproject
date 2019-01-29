@@ -57,4 +57,8 @@ Fixed pie chart text bug with a simple .merge()
 Added district names to the map
 
 # Day 15
-Added some more comments
+Added some more comments.  
+One municipality has been renamed from S to Súdwest-Fryslân.
+
+# Day 16
+I have chosen to make districts in a selected municipality more opaque than other districts instead of making their borders blue.
