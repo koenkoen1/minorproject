@@ -398,8 +398,8 @@ function updatePieGraph(data, stat) {
 function createLineGraph(data) {
   // width, height and the margin for text
   let w = 600,
-    h = 300,
-    margin = 25;
+    h = 250,
+    margin = 13;
 
   // prune and reparse data into d3-compatible format
   let dataArray = [];
@@ -416,7 +416,7 @@ function createLineGraph(data) {
   // x scale
   let xScale = d3.scaleLinear()
       .domain([2002, 2016])
-      .range([margin, w - margin]);
+      .range([2 * margin, w]);
 
   // y scale
   let yScale = d3.scaleLinear()
@@ -432,7 +432,7 @@ function createLineGraph(data) {
   // initialize svg
   let svg = d3.select(".graphs").append("svg")
       .attr("width", w + 2 * margin)
-      .attr("height", h + 2 * margin)
+      .attr("height", h + margin)
       .attr("class", "lineChart")
       .attr("id", "lineChart");
 
@@ -445,20 +445,20 @@ function createLineGraph(data) {
   // x axis label
   svg.append("text")
       .attr("class", "x label")
-      .attr("transform", "translate(" + (w/2 - margin) + ", " + h + ")")
+      .attr("transform", "translate(" + (w/2 - margin) + ", " + (h + 10) + ")")
       .text("Years");
 
   // y axis
   svg.append("g")
       .attr("class", "y axis")
-      .attr("transform", "translate(" + margin + ", 0)")
+      .attr("transform", "translate(" + (2 * margin) + ", 0)")
       .call(d3.axisLeft(yScale).tickSize(-w + 2 * margin));
 
   // y axis label
   svg.append("text")
       .attr("class", "x label")
-      .attr("x", -h/1.4)
-      .attr("y", 10)
+      .attr("x", -h/1.3)
+      .attr("y", 13)
       .attr("transform", "rotate(-90)")
       .text("Quality of Life score");
 
@@ -472,8 +472,8 @@ function createLineGraph(data) {
 function updateLineGraph(data) {
   // width, height and the margin for text
   let w = 600,
-    h = 300,
-    margin = 25;
+    h = 250,
+    margin = 13;
 
   // prune and reparse data into d3-compatible format
   let dataArray = [];
@@ -490,7 +490,7 @@ function updateLineGraph(data) {
   // x scale
   let xScale = d3.scaleLinear()
       .domain([2002, 2016])
-      .range([margin, w - margin]);
+      .range([2 * margin, w]);
 
   // y scale
   let yScale = d3.scaleLinear()
