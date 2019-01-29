@@ -259,8 +259,7 @@ function createPieGraph(data) {
           return mapColours[d.data.number];
         })
         .attr("class", "arc")
-        .attr("stroke", "white")
-        .attr("d", arc);
+        .attr("stroke", "white");
 
   // selection of labels
   let text = d3.select(".pieChart").select(".labels").selectAll("text")
