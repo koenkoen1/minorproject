@@ -13,17 +13,18 @@ Piechart with distribution of the QoL in the country/chosen municipality.
 Piechart also functions as a legend for the maps.  
 Dropdown for selecting a time or period.  
 
-![missing picture](https://github.com/koenkoen1/minorproject/blob/master/doc/development.png)
-
+![missing picture](https://github.com/koenkoen1/minorproject/blob/master/doc/development.png)  
 Button to choose between current QoL or development in it.  
 
-![missing picture](https://github.com/koenkoen1/minorproject/blob/master/doc/zoomed.png)
-
+![missing picture](https://github.com/koenkoen1/minorproject/blob/master/doc/zoomed.png)  
 Municipality map transforms into a map of the districts and zooms in on a chosen municipality.  
 Linegraph  of the QoL in a chosen municipality/district over a period of time.  
 Button to make the district map transform back into the municipality map.  
 
-This is free and unencumbered software released into the public domain.
-
 ### external components
-d3, municipality map from wikipedia, mapshaper.org for converting the district map
+[leefbaarometer data](https://data.overheid.nl/data/dataset/leefbaarometer-2-0---meting-2016), the shapefile of the districts was converted to an svg on mapshaper.org.  
+[d3](https://github.com/d3/d3). The d3 license is included in the d3 folder, so I am allowed to use it.  
+[municipality map](https://upload.wikimedia.org/wikipedia/commons/b/b7/Nederland_gemeenten_2016.svg)  
+
+### copyright statement
+This is free and unencumbered software released into the public domain.

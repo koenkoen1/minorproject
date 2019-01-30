@@ -33,15 +33,15 @@ window.onload = function() {
       return z;
     };
 
-    // give all districts in a selected municipality a blue border
-    function strokeDists(data, code) {
-      // turn border of unselected districts back to grey
+    // make all districts in a selected municipality opaque
+    function opaqueDists(data, code) {
+      // turn unselected area less opaque
       d3.select(document.getElementById("districts").contentDocument)
           .selectAll(".selected")
           .attr("class", "")
           .style("opacity", 0.3);
 
-      // turn border of selected districts to blue
+      // turn selected area opaque
       Object.keys(data).filter(function(k) {
         return k.indexOf('WK' + code) == 0;
       }).forEach(function(element) {
@@ -66,7 +66,7 @@ window.onload = function() {
 
         // filter data
         let areaCode = this.getAttribute('cbs').slice(2);
-        strokeDists(response[1], areaCode);
+        opaqueDists(response[1], areaCode);
         dataset = filterObject(response[1], areaCode);
 
         // update charts
@@ -117,7 +117,7 @@ window.onload = function() {
 
         // filter data
         let areaCode = this.getAttribute('id');
-        strokeDists(response[1], areaCode.slice(2, 6));
+        opaqueDists(response[1], areaCode.slice(2, 6));
         dataset = filterObject(response[1], areaCode.slice(2, 6));
 
         // update charts
@@ -193,7 +193,7 @@ window.onload = function() {
       document.getElementById("areaName").innerHTML = "Quality of life in the whole country";
       document.getElementById("back").innerHTML = "";
       document.getElementById("lineChart").style.visibility = "hidden";
-    })
+    });
 
     // create piechart
     createPieGraph(response[1]);

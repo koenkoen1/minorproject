@@ -63,3 +63,6 @@ One municipality has been renamed from S to Súdwest-Fryslân.
 # Day 16
 I have chosen to make districts in a selected municipality more opaque than other districts instead of making their borders blue.
 The background of the site is now blueish
+
+# Day 17
+I have chosen the unlicense license.
