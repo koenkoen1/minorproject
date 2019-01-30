@@ -5,7 +5,7 @@
 * column limit: 80
 * At least one comment per function
 * use const and let instead of var
-* The use of a variable should be obvious due the it's name or a comment
+* The use of a variable should be obvious due the its name or a comment
 * the structure of the html, the code and the style should be in separate files
 * Indent continuation lines at least +4 spaces
 

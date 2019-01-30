@@ -59,6 +59,7 @@ window.onload = function() {
 
       // create onclick, which updates the map, line- and pie chart
       d3.select(this).on("click", function() {
+        let name = this.getAttribute("gem");
 
         // zoom in to and change to district map
         mapZoom(this);
@@ -68,20 +69,18 @@ window.onload = function() {
         strokeDists(response[1], areaCode);
         dataset = filterObject(response[1], areaCode);
 
-        // update pie chart
+        // update charts
         updatePieGraph(dataset, currentStat);
-
-        // create/update line chart
         let lineChart = d3.select(".lineChart");
         if (lineChart.empty()) {
-          createLineGraph(response[0][this.getAttribute('cbs')]);
+          createLineGraph(response[0][this.getAttribute('cbs')], name);
         } else {
-          updateLineGraph(response[0][this.getAttribute('cbs')]);
+          updateLineGraph(response[0][this.getAttribute('cbs')], name);
           document.getElementById("lineChart").style.visibility = "visible";
         };
 
         // make some stuff appear
-        document.getElementById("areaName").innerHTML = "Quality of life in " + this.getAttribute("gem");
+        document.getElementById("areaName").innerHTML = "Quality of life in " + name;
         document.getElementById("back").innerHTML = "<button type='button' class='backButton'>Back</button>";
       });
     });
@@ -108,6 +107,10 @@ window.onload = function() {
 
       // create onclick, which updates the map, line- and pie chart
       d3.select(this).on("click", function() {
+        let muniName = d3.select(document.getElementById("municipalities").contentDocument)
+          .select(".GM" + this.getAttribute("id").slice(2, 6))
+          .attr("gem");
+        let distName = this.getAttribute("name");
 
         // pan to other district
         mapZoom(this);
@@ -117,17 +120,12 @@ window.onload = function() {
         strokeDists(response[1], areaCode.slice(2, 6));
         dataset = filterObject(response[1], areaCode.slice(2, 6));
 
-        // update pie chart
+        // update charts
         updatePieGraph(dataset, currentStat);
-
-        // update line chart
-        updateLineGraph(response[1][areaCode]);
+        updateLineGraph(response[1][areaCode], distName);
         document.getElementById("lineChart").style.visibility = "visible";
 
         // make some stuff appear
-        let muniName = d3.select(document.getElementById("municipalities").contentDocument)
-          .select(".GM" + this.getAttribute("id").slice(2, 6))
-          .attr("gem");
         document.getElementById("areaName").innerHTML = "Quality of life in " + muniName;
         document.getElementById("back").innerHTML = "<button type='button' class='backButton'>Back</button>";
       });
@@ -164,10 +162,12 @@ window.onload = function() {
         dataChange('VKL0216');
         modeChange(options1, 5);
         currentMode = 'VKL0216';
+        this.innerHTML = "Quality of Life"
       } else {
         dataChange('KL16');
         modeChange(options2, 0);
         currentMode = 'KL16';
+        this.innerHTML = "Development"
       };
     });
 
@@ -394,7 +394,7 @@ function updatePieGraph(data, stat) {
   text.exit().remove();
 }
 
-function createLineGraph(data) {
+function createLineGraph(data, name) {
   // width, height and the margin for text
   let w = 600,
     h = 250,
@@ -420,7 +420,7 @@ function createLineGraph(data) {
   // y scale
   let yScale = d3.scaleLinear()
       .domain([0, 10])
-      .range([h - margin, margin]);
+      .range([h - margin, 2 * margin]);
 
   // function that will create the path of the line
   let line = d3.line()
@@ -435,11 +435,16 @@ function createLineGraph(data) {
       .attr("class", "lineChart")
       .attr("id", "lineChart");
 
+  svg.append("text")
+      .attr("class", "lineTitle")
+      .attr("transform", "translate(" + (w/2.7) + ", " + (1.5 * margin) + ")")
+      .text("Quality of Life in " + name)
+
   // x axis
   svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + (h - margin) + ")")
-      .call(d3.axisBottom(xScale).tickFormat(d3.format("d")).tickSize(-h + 2 * margin));
+      .call(d3.axisBottom(xScale).tickFormat(d3.format("d")).tickSize(-h + 3 * margin));
 
   // x axis label
   svg.append("text")
@@ -468,7 +473,7 @@ function createLineGraph(data) {
       .attr("d", line);
 }
 
-function updateLineGraph(data) {
+function updateLineGraph(data, name) {
   // width, height and the margin for text
   let w = 600,
     h = 250,
@@ -486,6 +491,12 @@ function updateLineGraph(data) {
     };
   };
 
+  if (!name) {
+    name = "unnamed district";
+  };
+  d3.select(".lineTitle")
+      .text("Quality of Life in " + name);
+
   // x scale
   let xScale = d3.scaleLinear()
       .domain([2002, 2016])
@@ -494,7 +505,7 @@ function updateLineGraph(data) {
   // y scale
   let yScale = d3.scaleLinear()
       .domain([0, 10])
-      .range([h - margin, margin]);
+      .range([h - margin, 2 * margin]);
 
   // function that will create the path of the line
   let line = d3.line()

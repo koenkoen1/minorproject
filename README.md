@@ -1,42 +1,27 @@
-# minorproject
+# Quality of Life in the Netherlands
 Koen Dielhoff
 
-## Problem statement
-Which part of the Netherlands is best to live in if money is of no concern?
-
-## solution
-The "leefbaarometer" has data about how well people are living, the quality of life, in certain areas of the Netherlands. This data just has to be visualised.
+## Introduction
+The [leefbaarometer](https://data.overheid.nl/data/dataset/leefbaarometer-2-0---meting-2016) has data about how well people are living, i.e the quality of life (QoL), in certain areas of the Netherlands. The score ranges from 1, very insufficient, to 9, excellent. The development of the QoL has also been given a score, which ranges from 1, large regression, to 7, large progression.  
+With this data I made this map so people can easily search and find how good the quality of life is in their and any of their acquaintances' neighbourhoods.
 
 ![missing picture](https://github.com/koenkoen1/minorproject/blob/master/doc/entry.png)
 
-### features (minimum viable product)
-QoL map of municipalities in the country
-linegraph  of leefbaarheid in a chosen municipality/district over a period of time.
-piechart with distribution of leefbaarheid in the country/chosen municipality.
-dropdownbox for time periods
-button to choose between current leefbaarheid and change in leefbaarheid.
+### features
+QoL map of municipalities in the country.  
+Piechart with distribution of the QoL in the country/chosen municipality.  
+Piechart also functions as a legend for the maps.  
+Dropdown for selecting a time or period.  
 
-### extra features
-QoL map transforms into a map of the districts in the chosen municipality.
-button to return to the map of municipalities in the country.
+![missing picture](https://github.com/koenkoen1/minorproject/blob/master/doc/development.png)
 
-## prerequisites
-### data source
-https://data.overheid.nl/data/dataset/leefbaarometer-2-0---meting-2016  
-The leefbaarometer score is dependent on 100 factors divided into categories:
-1. houses (quantity, amount of detached houses, etc)
-2. residents (amount of immigrants, elders or single-parents, etc)
-3. services (distance to services, schools and doctors within 1 km, disappearing grocery stores, etc)
-4. safety (nuisances, disturbances, violence, burglaries)
-5. environment (quantity of monumnets, surface covered with green or water, risks of natural disasters, etc)  
+Button to choose between current QoL or development in it.  
 
-The district map was converted to an svg with mapshaper.org
+![missing picture](https://github.com/koenkoen1/minorproject/blob/master/doc/zoomed.png)
+
+Municipality map transforms into a map of the districts and zooms in on a chosen municipality.  
+Linegraph  of the QoL in a chosen municipality/district over a period of time.  
+Button to make the district map transform back into the municipality map.  
 
 ### external components
-d3, map from wikipedia
-
-### similar visualisations
-https://www.leefbaarometer.nl/kaart/#kaart
-
-### hardest parts
-Getting the map working
+d3, municipality map from wikipedia, mapshaper.org for converting the district map
