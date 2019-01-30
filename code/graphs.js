@@ -437,8 +437,8 @@ function createLineGraph(data, name) {
 
   svg.append("text")
       .attr("class", "lineTitle")
-      .attr("transform", "translate(" + (w/2.7) + ", " + (1.5 * margin) + ")")
-      .text("Quality of Life in " + name)
+      .attr("transform", "translate(" + (w/2 - 2 * margin) + ", " + (1.5 * margin) + ")")
+      .text(name)
 
   // x axis
   svg.append("g")
@@ -495,7 +495,7 @@ function updateLineGraph(data, name) {
     name = "unnamed district";
   };
   d3.select(".lineTitle")
-      .text("Quality of Life in " + name);
+      .text(name);
 
   // x scale
   let xScale = d3.scaleLinear()

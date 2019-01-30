@@ -23,5 +23,7 @@ Municipality map transforms into a map of the districts and zooms in on a chosen
 Linegraph  of the QoL in a chosen municipality/district over a period of time.  
 Button to make the district map transform back into the municipality map.  
 
+This is free and unencumbered software released into the public domain.
+
 ### external components
 d3, municipality map from wikipedia, mapshaper.org for converting the district map
