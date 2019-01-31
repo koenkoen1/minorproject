@@ -7,6 +7,9 @@ With this data I made this map so people can easily search and find how good the
 
 ![missing picture](https://github.com/koenkoen1/minorproject/blob/master/doc/entry.png)
 
+### Demo
+https://drive.google.com/open?id=1sc1woSP9zg-BYvf23COF6lRY_WFmmKHG
+
 ### features
 QoL map of municipalities in the country.  
 Piechart with distribution of the QoL in the country/chosen municipality.  
